@@ -4,7 +4,7 @@ kMachineCount=10
 
 docker build -t slurm-machine .
 docker run -it -v $(readlink -f slurm):/repositories/slurm --name slurm-compilation-machine slurm-machine || exit $?
-docker commit -c "cmd /usr/sbin/sshd -E /var/log/ssh.log ; /sbin/munged ; su -c \"/sbin/slurmctld -L /var/spool/slurmctl/deamon.log\" user ; /sbin/slurmd -vvvvvvv -L /var/spool/slurmd/deamon.log ; sleep infinity" slurm-compilation-machine cluster-machine
+docker commit -c "cmd /usr/sbin/sshd -E /var/log/ssh.log ; /usr/sbin/munged ; su -c \"/usr/sbin/slurmctld -L /var/spool/slurmctl/deamon.log\" user ; /usr/sbin/slurmd -vvvvvvv -L /var/spool/slurmd/deamon.log ; sleep infinity" slurm-compilation-machine cluster-machine
 docker rm slurm-compilation-machine
 
 echo docker network create --subnet=172.28.0.0/16 --gateway=172.28.0.1 --ip-range=172.28.1.0/24 cluster > startLog

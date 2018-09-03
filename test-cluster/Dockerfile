@@ -38,16 +38,16 @@ run apt update && apt install -y less
 
 #setup for munge
 run bash -c "mkdir -p /{etc,var/{lib,log,run}}/munge"
-run bash -c "chown munge:munge /{etc,var/{lib,log,run}}/munge /sbin/munged"
+run bash -c "chown munge:munge /{etc,var/{lib,log,run}}/munge /usr/sbin/munged"
 run chmod 700 /etc/munge /var/log/munge
 run chmod 711 /var/lib/munge
 run chmod 755 /var/run/munge
-run chmod 700 /sbin/munged
-run chmod +s /sbin/munged
+run chmod 700 /usr/sbin/munged
+run chmod +s /usr/sbin/munged
 
 #setup for ssh
 run mkdir /var/run/sshd
-run adduser --disabled-password user
+run yes '' | adduser --disabled-password user
 user user
 run mkdir -p /home/user/.ssh
 run chmod 700 /home/user/.ssh
