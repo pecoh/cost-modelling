@@ -1,0 +1,27 @@
+#! /bin/bash
+
+# Does not reconfigure if a config.result file is present and contains a zero,
+# so you can force reconfiguration by a simple `rm config.result`.
+
+echo "Checkpoint, \$(pwd) = '$(pwd)'"
+cd /repositories/slurm
+
+configStatus=bad
+if test -e config.result && ((!$(< config.result))) ; then
+	configStatus=good
+fi
+
+if test $configStatus != good ; then
+	./configure --enable-debug --prefix=/usr --sysconfdir=/etc DEFAULT_SLURM_CONF=/etc/slurm.conf
+	result=$?
+	echo $result > config.result
+	if ((result)) ; then
+		exit $result
+	fi
+fi
+
+make -j8 all &&
+make contrib &&
+make install install-data &&
+make install-contrib &&
+/sbin/ldconfig -n /usr/lib/slurm

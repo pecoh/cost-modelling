@@ -1,0 +1,35 @@
+#! /bin/bash
+
+kMachineCount=10
+
+docker build -t slurm-machine .
+docker run -it -v $(readlink -f slurm):/repositories/slurm --name slurm-compilation-machine slurm-machine || exit $?
+docker commit -c "cmd /usr/sbin/sshd -E /var/log/ssh.log ; /sbin/munged ; su -c \"/sbin/slurmctld -L /var/spool/slurmctl/deamon.log\" user ; /sbin/slurmd -vvvvvvv -L /var/spool/slurmd/deamon.log ; sleep infinity" slurm-compilation-machine cluster-machine
+docker rm slurm-compilation-machine
+
+echo docker network create --subnet=172.28.0.0/16 --gateway=172.28.0.1 --ip-range=172.28.1.0/24 cluster > startLog
+docker network create --subnet=172.28.0.0/16 --gateway=172.28.0.1 --ip-range=172.28.1.0/24 cluster >> startLog
+for ((i = 0; i < kMachineCount; i++)) ; do
+	echo >> startLog
+	echo docker run --network=cluster --ip=172.28.1.$i --rm -d --hostname machine$i --name machine$i cluster-machine >> startLog
+	docker run --network=cluster --ip=172.28.1.$i --rm -d --hostname machine$i --name machine$i cluster-machine >> startLog
+
+	machineAddress=$(docker inspect machine$i | grep '\<IPAddress' | tail -n 1 | cut -d \" -f4)
+	echo started machine$i with IP address $machineAddress >> startLog
+	echo started machine$i with IP address $machineAddress
+done
+
+echo
+read -p "press enter to kill cluster"
+echo
+
+echo -n > killLog
+for ((i = 0; i < kMachineCount; i++)) ; do
+	echo killing machine$i
+
+	echo docker kill machine$i >> killLog
+	docker kill machine$i >> killLog
+	echo >> killLog
+done
+echo docker network rm cluster >> killLog
+docker network rm cluster >> killLog

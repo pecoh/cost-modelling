@@ -1,0 +1,3 @@
+#! /bin/bash
+
+/var/spool/slurmd/job-cost-meter.sh /var/spool/slurmd/job-cost-meter.config

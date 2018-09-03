@@ -1,0 +1,3 @@
+[submodule "test-cluster/slurm"]
+	path = test-cluster/slurm
+	url = https://github.com/SchedMD/slurm.git

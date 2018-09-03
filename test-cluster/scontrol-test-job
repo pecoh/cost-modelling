@@ -1,0 +1,30 @@
+#! /bin/bash
+sleep 3
+scontrol show job $SLURM_JOB_ID
+echo
+
+for key in foo \
+		account admincomment allocnode arrayjobid arraytaskid \
+		batchflag batchhost batchscript block_id burstbuffer burstbufferstate \
+		cnloadimage command comment contiguous corespec cpus \
+		deadline delayboot dependency derivedexitcode \
+		eligibletime endtime exitcode \
+		features fedactivesiblings fedorigin fedviablesiblings \
+		gres gresenforcebind groupid groupname \
+		ioloadimage \
+		jobid jobname jobstate \
+		killoininvaliddependent \
+		licenses \
+		mcs_label mincpusnode mloaderimage \
+		network nice numcpus numnodes numtasks \
+		oversubscribe \
+		partition power preempttime priority \
+		qos \
+		reason reboot requeue reservation resizetime restarts runtime \
+		secspresuspend sid spreadjob starttime stdout stdin stderr submittime suspendtime switches \
+		tres threadspec timelimit timemin \
+		userid username \
+		workdir ; do
+	temp="$(echo -n "'" ; scontrol show job-$key $SLURM_JOB_ID ; echo -n "', " ; echo -n $?)"
+	echo "$key = $temp"
+done
