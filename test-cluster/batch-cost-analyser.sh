@@ -1,5 +1,24 @@
 #! /bin/bash
+
 ####################################################################################################
+#
+# Copyright 2017 Nathanael Hübbe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+####################################################################################################
+#
 # batch_cost_analyser.sh <options> <config-file> <sacct-job-selection-options>
 #
 # This script is a twin of the `job-cost-meter.sh` script which is geared towards efficient analysis
@@ -27,6 +46,7 @@
 #  -m | --max-runtime <seconds>
 #     Ignore any job with a runtime larger than the provided maximum.
 #     A negative value switches this filter off (default).
+#
 ####################################################################################################
 
 ####################################################################################################
